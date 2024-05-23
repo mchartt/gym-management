@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { getMembers, addMember, editMember, deleteMember, Member, usernameExists } from './services/memberService';
-import { getCourses, addCourse, editCourse, deleteCourse, Course } from './services/coursseService';
+import { getMembers, addMember, editMember, deleteMember, Member, usernameExists, addCourseToMember } from './services/memberService';
+import { getCourses, addCourse, editCourse, deleteCourse, Course, addParticipantToCourse } from './services/coursseService';
 import HomePage from './pages/HomePage/Page';
 import MemberListPage from './pages/MembersList/Page';
 import CoursesListPage from './components/CoursesList';
-import './App.css'; // Include CSS for general styles
-import { APP_VERSION } from './version'; // Importa la versione
+import './App.css';
+import { APP_VERSION } from './version';
 
 const App: React.FC = () => {
     const [members, setMembers] = useState<Member[]>([]);
@@ -33,20 +33,34 @@ const App: React.FC = () => {
         setLoading(false);
     };
 
-    const handleAddMember = (member: Member) => {
-        if (usernameExists(member.username)) {
+    const handleAddMember = () => {
+        setSelectedMember({ id: 0, name: '', username: '', description: '', avatarUrl: '', courses: [] });
+        setCurrentPage('members');
+    };
+
+    const handleSaveMember = (member: Member) => {
+        if (usernameExists(member.username, member.id)) {
             setErrorMessage('Username already exists!');
             return;
         }
-        addMember(member);
+        if (member.id === 0) {
+            addMember(member);
+        } else {
+            editMember(member.id, member);
+        }
         fetchMembers();
+        setSelectedMember(null);
         setErrorMessage(null);
     };
 
     const handleEditMember = (id: number, updatedMember: Member) => {
+        if (usernameExists(updatedMember.username, id)) {
+            setErrorMessage('Username already exists!');
+            return;
+        }
         editMember(id, updatedMember);
         fetchMembers();
-        setSelectedMember(null); // Clear selection after editing
+        setSelectedMember(null);
         setErrorMessage(null);
     };
 
@@ -56,16 +70,26 @@ const App: React.FC = () => {
         setErrorMessage(null);
     };
 
-    const handleAddCourse = (course: Course) => {
-        addCourse(course);
+    const handleAddCourse = () => {
+        setSelectedCourse({ id: 0, name: '', description: '', startDate: '', participants: [] });
+        setCurrentPage('courses');
+    };
+
+    const handleSaveCourse = (course: Course) => {
+        if (course.id === 0) {
+            addCourse(course);
+        } else {
+            editCourse(course.id, course);
+        }
         fetchCourses();
+        setSelectedCourse(null);
         setErrorMessage(null);
     };
 
     const handleEditCourse = (id: number, updatedCourse: Course) => {
         editCourse(id, updatedCourse);
         fetchCourses();
-        setSelectedCourse(null); // Clear selection after editing
+        setSelectedCourse(null);
         setErrorMessage(null);
     };
 
@@ -78,13 +102,22 @@ const App: React.FC = () => {
     const handleSelectMember = (id: number) => {
         const member = members.find(member => member.id === id) || null;
         setSelectedMember(member);
+        setSelectedCourse(null);
         setErrorMessage(null);
     };
 
     const handleSelectCourse = (id: number) => {
         const course = courses.find(course => course.id === id) || null;
         setSelectedCourse(course);
+        setSelectedMember(null);
         setErrorMessage(null);
+    };
+
+    const handleAddCourseToMember = (memberId: number, courseId: number) => {
+        addCourseToMember(memberId, courseId);
+        addParticipantToCourse(courseId, memberId);
+        fetchMembers();
+        fetchCourses();
     };
 
     const renderPage = () => {
@@ -95,48 +128,66 @@ const App: React.FC = () => {
                         members={members}
                         onEdit={handleSelectMember}
                         onDelete={handleDeleteMember}
-                        onAdd={handleAddMember}
+                        onAdd={handleSaveMember}
                         selectedMember={selectedMember}
                         onEditSubmit={handleEditMember}
+                        onAddNew={handleAddMember}
                     />
                 );
             case 'courses':
                 return (
                     <CoursesListPage
                         courses={courses}
+                        members={members}
                         onEdit={handleSelectCourse}
                         onDelete={handleDeleteCourse}
-                        onAdd={handleAddCourse}
+                        onAdd={handleSaveCourse}
                         selectedCourse={selectedCourse}
                         onEditSubmit={handleEditCourse}
+                        onAddParticipant={handleAddCourseToMember}
+                        onAddNew={handleAddCourse}
                     />
                 );
             default:
-                return <HomePage navigate={setCurrentPage} />;
+                return (
+                    <HomePage
+                        navigate={setCurrentPage}
+                        members={members}
+                        courses={courses}
+                        selectedMember={selectedMember}
+                        selectedCourse={selectedCourse}
+                        onSelectMember={handleSelectMember}
+                        onSelectCourse={handleSelectCourse}
+                        onAddCourseToMember={handleAddCourseToMember}
+                    />
+                );
         }
     };
 
     if (loading) {
         return (
             <div className="loading-page">
-                <div className="spinner"></div>
-                <p>Loading...</p>
+                <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
             </div>
         );
     }
 
     return (
-        <div>
-            <header className="header">
-                <h1>Gym Management Tool</h1>
-                <nav>
-                    <button onClick={() => setCurrentPage('home')}>Home</button>
-                    <button onClick={() => setCurrentPage('members')}>Members</button>
-                    <button onClick={() => setCurrentPage('courses')}>Courses</button>
-                </nav>
-                <div className="version">Version: {APP_VERSION}</div>
+        <div className="container">
+            <header className="header py-3 mb-4 border-bottom">
+                <div className="d-flex justify-content-between align-items-center">
+                    <h1>Gym Management Tool</h1>
+                    <nav>
+                        <button className="btn btn-link text-white" onClick={() => setCurrentPage('home')}>Home</button>
+                        <button className="btn btn-link text-white" onClick={() => setCurrentPage('members')}>Members</button>
+                        <button className="btn btn-link text-white" onClick={() => setCurrentPage('courses')}>Courses</button>
+                    </nav>
+                </div>
+                <div className="">Version: {APP_VERSION}</div>
             </header>
-            {errorMessage && <div className="error">{errorMessage}</div>}
+            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             {renderPage()}
         </div>
     );
