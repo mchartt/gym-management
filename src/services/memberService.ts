@@ -48,6 +48,7 @@ export const addCourseToMember = (memberId: number, courseId: number) => {
         saveMembers();
     }
 };
+
 const saveMembers = () => {
     localStorage.setItem('members', JSON.stringify(members));
 };
