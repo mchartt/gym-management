@@ -26,3 +26,5 @@ const MembersDetail: React.FC<MembersDetailProps> = ({ member, onEdit, onDelete 
 };
 
 export default MembersDetail;
+
+

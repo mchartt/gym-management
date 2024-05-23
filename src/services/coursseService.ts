@@ -22,3 +22,6 @@ export const editCourse = (id: number, updatedCourse: Course) => {
 export const deleteCourse = (id: number) => {
     courses = courses.filter(course => course.id !== id);
 };
+
+
+// bisogna rivedere l'user-name perche si puo duplicare

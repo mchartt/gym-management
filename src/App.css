@@ -40,6 +40,16 @@ nav button:hover {
 
 .version {
   font-size: 14px;
-  color: black;
+  color: #fff;
+  margin-left: auto;
   padding-left: 20px;
+}
+
+.error {
+  color: red;
+  background-color: #fdd;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid red;
+  border-radius: 4px;
 }

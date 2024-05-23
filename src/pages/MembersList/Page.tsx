@@ -92,3 +92,6 @@ const MemberListPage: React.FC<MemberListPageProps> = ({
 };
 
 export default MemberListPage;
+
+
+// saved data when you decide to delete a user delete everything

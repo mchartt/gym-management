@@ -23,3 +23,7 @@ export const editMember = (id: number, updatedMember: Member) => {
 export const deleteMember = (id: number) => {
     members = members.filter(member => member.id !== id);
 };
+
+export const usernameExists = (username: string) => {
+    return members.some(member => member.username === username);
+};
