@@ -4,8 +4,9 @@ import { getCourses, addCourse, editCourse, deleteCourse, Course, addParticipant
 import HomePage from './pages/HomePage/Page';
 import MemberListPage from './pages/MembersList/Page';
 import CoursesListPage from './components/CoursesList';
+import LoginPage from './pages/LoginPage';
 import './App.css';
-import { APP_VERSION } from './version';
+import { APP_VERSION, COLORS } from './version';
 
 const App: React.FC = () => {
     const [members, setMembers] = useState<Member[]>([]);
@@ -15,6 +16,7 @@ const App: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<string>('home');
     const [loading, setLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
         fetchMembers();
@@ -120,7 +122,27 @@ const App: React.FC = () => {
         fetchCourses();
     };
 
+    const handleLogin = (username: string, password: string) => {
+        if (username === 'ingrosso' && password === 'gestionale') {
+            setIsAuthenticated(true);
+            setErrorMessage(null);
+        } else {
+            setErrorMessage('Invalid credentials');
+        }
+    };
+
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        setCurrentPage('home');
+        setSelectedMember(null);
+        setSelectedCourse(null);
+    };
+
     const renderPage = () => {
+        if (!isAuthenticated) {
+            return <LoginPage onLogin={handleLogin} errorMessage={errorMessage} />;
+        }
+
         switch (currentPage) {
             case 'members':
                 return (
@@ -176,16 +198,19 @@ const App: React.FC = () => {
 
     return (
         <div className="container">
-            <header className="header py-3 mb-4 border-bottom">
+            <header className="header py-3 mb-4 border-bottom" style={{ backgroundColor: COLORS.dark, color: COLORS.white }}>
                 <div className="d-flex justify-content-between align-items-center">
                     <h1>Gym Management Tool</h1>
-                    <nav>
-                        <button className="btn btn-link text-white" onClick={() => setCurrentPage('home')}>Home</button>
-                        <button className="btn btn-link text-white" onClick={() => setCurrentPage('members')}>Members</button>
-                        <button className="btn btn-link text-white" onClick={() => setCurrentPage('courses')}>Courses</button>
-                    </nav>
+                    {isAuthenticated && (
+                        <nav>
+                            <button className="btn btn-link text-white" style={{ color: COLORS.white }} onClick={() => setCurrentPage('home')}>Home</button>
+                            <button className="btn btn-link text-white" style={{ color: COLORS.white }} onClick={() => setCurrentPage('members')}>Members</button>
+                            <button className="btn btn-link text-white" style={{ color: COLORS.white }} onClick={() => setCurrentPage('courses')}>Courses</button>
+                            <button className="btn btn-link text-white" style={{ color: COLORS.white }} onClick={handleLogout}>Logout</button>
+                        </nav>
+                    )}
                 </div>
-                <div className="">Version: {APP_VERSION}</div>
+                {isAuthenticated && <div className="text-muted">Version: {APP_VERSION}</div>}
             </header>
             {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             {renderPage()}

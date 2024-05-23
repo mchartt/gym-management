@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Course } from '../services/coursseService';
 import { Member } from '../services/memberService';
 
+
 interface CoursesListPageProps {
     courses: Course[];
     members: Member[];
@@ -104,7 +105,7 @@ const CoursesListPage: React.FC<CoursesListPageProps> = ({
             </form>
             <ul className="list-group mb-3">
                 {courses.map((course) => (
-                    <li key={course.id} className="list-group-item">
+                    <li key={course.id} className="list-group-item" onClick={() => onEdit(course.id)}>
                         <div className="d-flex justify-content-between">
                             <div>
                                 {course.name} - {course.description} - Start Date: {course.startDate}

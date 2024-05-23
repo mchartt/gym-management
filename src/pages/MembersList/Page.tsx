@@ -104,7 +104,7 @@ const MemberListPage: React.FC<MemberListPageProps> = ({
             <ul className="list-group">
                 {members.map((member) => (
                     <li key={member.id} className="list-group-item d-flex justify-content-between align-items-center">
-            <span>
+            <span onClick={() => onEdit(member.id)}>
               {member.name} - {member.username}
             </span>
                         <div>
