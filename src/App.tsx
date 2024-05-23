@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getMembers, addMember, editMember, deleteMember, Member, usernameExists, addCourseToMember } from './services/memberService';
-import { getCourses, addCourse, editCourse, deleteCourse, Course, addParticipantToCourse } from './services/coursseService';
+import { getCourses, addCourse, editCourse, deleteCourse, Course, addParticipantToCourse } from './services/courseService';
 import HomePage from './pages/HomePage/Page';
 import MemberListPage from './pages/MembersList/Page';
 import CoursesListPage from './components/CoursesList';

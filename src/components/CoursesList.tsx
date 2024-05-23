@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Course } from '../services/coursseService';
+import { Course } from '../services/courseService';
 import { Member } from '../services/memberService';
 
 

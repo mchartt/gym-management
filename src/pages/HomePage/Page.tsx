@@ -1,6 +1,6 @@
 import React from 'react';
 import { Member } from '../../services/memberService';
-import { Course } from '../../services/coursseService';
+import { Course } from '../../services/courseService';
 import './components/HomePage.css';
 
 interface HomePageProps {
