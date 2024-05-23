@@ -1,4 +1,4 @@
-/* Imposta lo stile generale per il corpo della pagina */
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -6,7 +6,7 @@ body {
     padding: 20px;
 }
 
-/* Stile per il contenitore principale */
+
 div {
     max-width: 800px;
     margin: 0 auto;
@@ -16,14 +16,13 @@ div {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Stile per l'intestazione */
+
 h2 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
 
-/* Stile per il modulo */
 form {
     display: flex;
     flex-direction: column;
@@ -51,7 +50,7 @@ button[type="submit"]:hover {
     background-color: #4cae4c;
 }
 
-/* Stile per la lista dei corsi */
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -73,7 +72,7 @@ li:hover {
     background-color: #f1f1f1;
 }
 
-/* Stile per i pulsanti di modifica e eliminazione */
+
 button {
     background-color: #d9534f;
     color: white;

@@ -6,7 +6,7 @@ export interface Course {
 }
 
 let courses: Course[] = [
-    // Aggiungi qui i tuoi corsi fittizi
+
 ];
 
 export const getCourses = () => courses;

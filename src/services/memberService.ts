@@ -7,7 +7,7 @@ export interface Member {
 }
 
 let members: Member[] = [
-    // Aggiungi qui i tuoi membri fittizi
+
 ];
 
 export const getMembers = () => members;

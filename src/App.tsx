@@ -13,6 +13,7 @@ const App: React.FC = () => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
     const [currentPage, setCurrentPage] = useState<string>('home');
+    const [loading, setLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
@@ -23,11 +24,13 @@ const App: React.FC = () => {
     const fetchMembers = () => {
         const membersData = getMembers();
         setMembers(membersData);
+        setLoading(false);
     };
 
     const fetchCourses = () => {
         const coursesData = getCourses();
         setCourses(coursesData);
+        setLoading(false);
     };
 
     const handleAddMember = (member: Member) => {
@@ -112,6 +115,15 @@ const App: React.FC = () => {
                 return <HomePage navigate={setCurrentPage} />;
         }
     };
+
+    if (loading) {
+        return (
+            <div className="loading-page">
+                <div className="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        );
+    }
 
     return (
         <div>
