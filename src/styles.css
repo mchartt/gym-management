@@ -1,0 +1,35 @@
+.home-page {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .home-page .home-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    margin: 1rem 0;
+  }
+  
+  .users-page {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .users-page ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .users-page li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .users-page .user-avatar {
+    width: 50px;
+    height: 50px;
+    margin-right: 1rem;
+    border-radius: 50%;
+  }
+  
